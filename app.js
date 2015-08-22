@@ -18,10 +18,15 @@ var testData = [{
     rating: 100
 }];
 
+var config = {
+	width: 350,
+	height: 350
+};
+
 // Base Graph
-function Graph(width, height, arr) {
+function Graph(config, arr) {
     this.modeSetData(arr);
-    this.beginCanvas(width, height);
+    this.beginCanvas(config);
 }
 
 // Set data for later use by Children
@@ -30,16 +35,16 @@ Graph.prototype.modeSetData = function(arr) {
 }
 
 // Initialize Canvas
-Graph.prototype.beginCanvas = function(width, height) {
+Graph.prototype.beginCanvas = function(config) {
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.updateSize(width, height);
+    this.updateSize(config);
 }
 
 // Update canvas size
-Graph.prototype.updateSize = function(width, height) {
-    this.canvas.width = width;
-    this.canvas.height = height;
+Graph.prototype.updateSize = function(config) {
+    this.canvas.width = config.width;
+    this.canvas.height = config.height;
 }
 
 // Grab 'this' objects specific canvas
@@ -69,11 +74,11 @@ LineGraph.prototype.determineYColumns = function() {
     return maxFound;
 }
 
-var graph = new Graph(350, 350);
+var graph = new Graph(config);
 var canvas = graph.getCurrentCanvas();
 document.getElementById('graph').appendChild(canvas);
 
-var testDataGraph = new LineGraph(350, 350, testData);
+var testDataGraph = new LineGraph(config,testData);
 
 console.log(testDataGraph.determineYColumns());
 console.log(testDataGraph.determineXColumns());
