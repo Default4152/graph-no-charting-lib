@@ -61,15 +61,24 @@ function LineGraph() {
 // Configure prototypes
 LineGraph.prototype = Object.create(Graph.prototype);
 
-LineGraph.prototype.getLargestX = function() {
-	console.log(this.dataChoice.length);
+LineGraph.prototype.determineXColumns = function() {
+	this.xColumns = this.dataChoice.length;
 }
-LineGraph.prototype.getLargestY = function() {}
 
+LineGraph.prototype.determineYColumns = function() {
+	var maxFound = 0;
+	for (var i = 0; i < this.dataChoice.length; i++) {
+		if (this.dataChoice[i].rating > maxFound) {
+			maxFound = this.dataChoice[i].rating;
+		}
+	}
+	return maxFound;
+}
 
 var graph = new Graph(350, 350);
 var canvas = graph.getCurrentCanvas();
 document.getElementById('graph').appendChild(canvas);
 
 var testDataGraph = new LineGraph(350, 350, testData);
-testDataGraph.getLargestX();
+
+console.log(testDataGraph.determineYColumns());
