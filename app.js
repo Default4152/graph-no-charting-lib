@@ -16,6 +16,9 @@ var testData = [{
 }, {
   name: 'Haskell',
   rating: 100
+}, {
+  name: 'Lisp',
+  rating: 31
 }];
 
 var config = {
@@ -90,9 +93,7 @@ LineGraph.prototype.plot = function () {
   this.ctx.lineWidth = 2;
   for (var i = 0; i < this.dataChoice.length; i++) {
     var previousPos = currentPos;
-    console.log(previousPos);
     var currentPos = this.getPos(i, this.dataChoice[i].rating);
-    console.log(currentPos);
     this.ctx.beginPath();
     this.ctx.arc(currentPos.x, currentPos.y, 2, 0, (Math.PI * 2), false);
     this.ctx.fill();
