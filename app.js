@@ -95,7 +95,9 @@ LineGraph.prototype.plot = function () {
     var previousPos = currentPos;
     var currentPos = this.getPos(i, this.dataChoice[i].rating);
     this.ctx.beginPath();
-    this.ctx.arc(currentPos.x, currentPos.y, 2, 0, (Math.PI * 2), false);
+    this.ctx.arc(currentPos.x, currentPos.y, 3, 0, (Math.PI * 2), false);
+    this.ctx.font = "15px Georgia";
+    this.ctx.fillText(this.dataChoice[i].name, currentPos.x + 7, currentPos.y + 20);
     this.ctx.fill();
 
     if (previousPos) {
