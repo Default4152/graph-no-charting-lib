@@ -52,6 +52,15 @@ Graph.prototype.getCurrentCanvas = function() {
     return this.canvas;
 }
 
+Graph.prototype.clearCanvas = function() {
+	this.ctx.clearRect(0, 0, this.width, this.height);
+}
+
+Graph.prototype.renderGraph = function () {
+  this.clearCanvas();
+  this.plot();
+};
+
 // More specific Graphs
 function LineGraph() {
     Graph.apply(this, arguments); // Inherit
@@ -67,6 +76,7 @@ LineGraph.prototype.determineXColumns = function() {
 LineGraph.prototype.determineYColumns = function() {
     var maxFound = 0;
     for (var i = 0; i < this.dataChoice.length; i++) {
+
         if (this.dataChoice[i].rating > maxFound) {
             maxFound = this.dataChoice[i].rating;
         }
@@ -74,11 +84,37 @@ LineGraph.prototype.determineYColumns = function() {
     return maxFound;
 }
 
-var graph = new Graph(config);
-var canvas = graph.getCurrentCanvas();
-document.getElementById('graph').appendChild(canvas);
+LineGraph.prototype.plot = function() {
+	this.ctx.save();
+	this.ctx.fillStyle = this.ctx.strokeStyle = "#ED3050";
+	this.ctx.lineWidth = 2;
+	for (var i = 0; i < this.dataChoice.length; i++) {
+		var previousPos = currentPos;
+		console.log(previousPos);
+		var currentPos = this.getPos(i, this.dataChoice[i].rating);
+		console.log(currentPos);
+		this.ctx.beginPath();
+		this.ctx.arc(currentPos.x, currentPos.y, 2, 0, (Math.PI*2), false);
+		this.ctx.fill();
+
+		if (previousPos) {
+			this.ctx.moveTo(previousPos.x, previousPos.y);
+			this.ctx.lineTo(currentPos.x, currentPos.y);
+			this.ctx.stroke();
+		}
+	}
+
+	this.ctx.restore();
+}
+
+LineGraph.prototype.getPos = function (a, b) {
+  	return {
+    	x: ~~(this.canvas.width / this.determineXColumns() * a),
+    	y: ~~(this.canvas.height - this.canvas.height / this.determineYColumns() * b)
+  	};
+};
 
 var testDataGraph = new LineGraph(config,testData);
-
-console.log(testDataGraph.determineYColumns());
-console.log(testDataGraph.determineXColumns());
+var canvas = testDataGraph.getCurrentCanvas();
+document.getElementById('graph').appendChild(canvas);
+testDataGraph.renderGraph();
